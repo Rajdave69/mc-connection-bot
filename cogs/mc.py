@@ -1,18 +1,3 @@
-#   ╔═╗╔═╗            ╔╗       ╔╗ ╔╗     ╔══╗      ╔╗              ╔═══╗╔═══╗╔═══╗
-#   ║║╚╝║║            ║║       ║║ ║║     ║╔╗║     ╔╝╚╗             ║╔═╗║║╔═╗║║╔═╗║
-#   ║╔╗╔╗║╔══╗╔══╗╔═╗ ║╚═╗╔══╗ ║║ ║║     ║╚╝╚╗╔══╗╚╗╔╝             ║║ ╚╝║║ ║║║║ ╚╝
-#   ║║║║║║║╔╗║║╔╗║║╔╗╗║╔╗║╚ ╗║ ║║ ║║     ║╔═╗║║╔╗║ ║║     ╔═══╗    ║║ ╔╗║║ ║║║║╔═╗
-#   ║║║║║║║╚╝║║╚╝║║║║║║╚╝║║╚╝╚╗║╚╗║╚╗    ║╚═╝║║╚╝║ ║╚╗    ╚═══╝    ║╚═╝║║╚═╝║║╚╩═║
-#   ╚╝╚╝╚╝╚══╝╚══╝╚╝╚╝╚══╝╚═══╝╚═╝╚═╝    ╚═══╝╚══╝ ╚═╝             ╚═══╝╚═══╝╚═══╝
-#
-#
-#   This is a cog belonging to the Moonball Bot.
-#   We are Open Source => https://moonball.io/opensource
-#
-#   This code is not intended to be edited but feel free to do so
-#   More info can be found on the GitHub page:
-#
-
 import discord
 import mysql.connector
 import mysql.connector
@@ -98,21 +83,6 @@ class MC(commands.Cog):
     @commands.slash_command(
         name="forceconnect",
         description="Force connects a Discord account to a Minecraft Account",
-        options=[
-            {
-                "name": "discord_id",
-                "description": "The Discord ID of the user",
-                "type": 3,
-                "required": True
-            },
-            {
-                "name": "uuid",
-                "description": "The UUID of the Minecraft account",
-                "type": 3,
-                "required": True
-
-            }
-        ]
     )
     async def forcecon(self, ctx, discord_id: int, uuid: str):
         await ctx.defer()

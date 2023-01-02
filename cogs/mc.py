@@ -39,7 +39,7 @@ class MC(commands.Cog):
     async def con(self, ctx, code: str):
         await ctx.defer()
 
-        self.cur.execute("SELECT discord FROM `connection` WHERE `code` = %s", (code,))
+        self.cur.execute("SELECT discord_id FROM `connection` WHERE code = %s", (code,))
         id_result = self.cur.fetchone()
 
         if not id_result:
@@ -50,7 +50,7 @@ class MC(commands.Cog):
             await ctx.followup.send(error_template("The Minecraft account is already connected to a Discord account."))
             return
 
-        self.cur.execute("UPDATE `connection` SET `discord_id` = %s, WHERE `code` = %s", (ctx.author.id, code))
+        self.cur.execute("UPDATE `connection` SET `discord_id` = %s WHERE `code` = %s", (ctx.author.id, code))
         self.con.commit()
 
         # Insert into the database
@@ -65,7 +65,7 @@ class MC(commands.Cog):
     async def discon(self, ctx):
         await ctx.defer()
 
-        self.cur.execute("SELECT uuid FROM `connection` WHERE `discord_id` = ?", (ctx.author.id,))
+        self.cur.execute("SELECT username FROM `connection` WHERE `discord_id` = ?", (ctx.author.id,))
         id_result = self.cur.fetchone()
 
         if not id_result:
@@ -87,14 +87,14 @@ class MC(commands.Cog):
     async def forcecon(self, ctx, discord_id: int, uuid: str):
         await ctx.defer()
 
-        self.cur.execute("SELECT discord FROM `connection` WHERE `code` = %s", (uuid,))
+        self.cur.execute("SELECT `discord_id` FROM `connection` WHERE code = %s", (uuid,))
         id_result = self.cur.fetchone()
 
         if id_result:
-            self.cur.execute("UPDATE `connection` SET `discord_id` = %s, WHERE `code` = %s", (discord_id, uuid))
+            self.cur.execute("UPDATE `connection` SET `discord_id` = %s WHERE `code` = %s", (discord_id, uuid))
 
         else:
-            self.cur.execute("INSERT INTO `connection` (`discord_id`, `code`, `uuid`) VALUES (?, ?, ?)",
+            self.cur.execute("INSERT INTO `connection` (`discord_id`, `code`, `username`) VALUES (?, ?, ?)",
                              (discord_id, random.randint(100000, 999999), uuid))
 
         self.con.commit()

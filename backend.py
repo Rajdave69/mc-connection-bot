@@ -1,10 +1,11 @@
 import aiohttp
 import configparser
 import json
-import sqlite3
 import sys
 import discord
 import logging
+
+import mysql.connector
 from discord.ext import commands
 from colorlog import ColoredFormatter
 
@@ -78,24 +79,33 @@ _embed_template = discord.Embed(
     url=embed_url
 )
 
-_error_template = discord.Embed(
-    color=0xff0000,
-    url=embed_url
-)
-
 _embed_template.set_footer(text=embed_footer)
-_error_template.set_footer(text=embed_footer)
 
 embed_template = lambda: _embed_template.copy()
-error_template = lambda description: _error_template.copy().description(description)
+
+
+def error_template(description: str) -> discord.Embed:
+    _error_template = discord.Embed(
+        description=description,
+        color=0xff0000,
+        url=embed_url
+    )
+    _error_template.set_footer(text=embed_footer)
+
+    return _error_template.copy()
 
 
 def get_con(discord_id) -> str or None:
-    con = sqlite3.connect('./data/data.db')
-    cur = con.cursor()
+    con = mysql.connector.connect(
+        host=db_host,
+        user=db_user,
+        password=db_pass,
+        database=db_name
+    )
+    cursor = con.cursor(prepared=True)
 
-    cur.execute("SELECT uuid FROM users WHERE discord_id = ?", (discord_id,))
-    data = cur.fetchone()
+    cursor.execute("SELECT uuid FROM users WHERE discord_id = ?", (discord_id,))
+    data = cursor.fetchone()
     return data[0] if data else None
 
 

@@ -30,7 +30,7 @@ class Listeners(commands.Cog):
                 await send_cmd(cmd)  # Sends the command to LuckPerms server
                 await after.send(
                     f"Greetings, You have been given the `{role}` rank in-game.")
-                log.info(f"Gave `{after.name}#{after.discriminator}` the `{new_role.name.capitalize()}` rank!")
+                log.info(f"Gave `{after.name}#{after.discriminator}` the `{role}` rank!")
 
         # If a role is removed from the user
         if len(before.roles) > len(after.roles):

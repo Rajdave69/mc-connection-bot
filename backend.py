@@ -104,7 +104,7 @@ def get_con(discord_id) -> str or None:
     )
     cursor = con.cursor(prepared=True)
 
-    cursor.execute("SELECT uuid FROM users WHERE discord_id = ?", (discord_id,))
+    cursor.execute("SELECT username FROM users WHERE discord_id = ?", (discord_id,))
     data = cursor.fetchone()
     return data[0] if data else None
 

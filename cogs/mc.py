@@ -16,8 +16,7 @@
 import discord
 import mysql.connector
 import mysql.connector
-import sqlite3
-from discord.commands import SlashCommandGroup
+import random
 from discord.ext import commands
 
 from backend import embed_template, error_template, db_host, db_name, db_user, db_pass  # Import bot variables
@@ -93,6 +92,45 @@ class MC(commands.Cog):
 
         embed = embed_template()
         embed.add_field(name="Success", value="Your Discord account is now disconnected from your Minecraft account.")
+        await ctx.followup.send(embed=embed)
+
+    @commands.has_permissions(administrator=True)
+    @commands.slash_command(
+        name="forceconnect",
+        description="Force connects a Discord account to a Minecraft Account",
+        options=[
+            {
+                "name": "discord_id",
+                "description": "The Discord ID of the user",
+                "type": 3,
+                "required": True
+            },
+            {
+                "name": "uuid",
+                "description": "The UUID of the Minecraft account",
+                "type": 3,
+                "required": True
+
+            }
+        ]
+    )
+    async def forcecon(self, ctx, discord_id: int, uuid: str):
+        await ctx.defer()
+
+        self.cur.execute("SELECT discord FROM `connection` WHERE `code` = %s", (uuid,))
+        id_result = self.cur.fetchone()
+
+        if id_result:
+            self.cur.execute("UPDATE `connection` SET `discord_id` = %s, WHERE `code` = %s", (discord_id, uuid))
+
+        else:
+            self.cur.execute("INSERT INTO `connection` (`discord_id`, `code`, `uuid`) VALUES (?, ?, ?)",
+                             (discord_id, random.randint(100000, 999999), uuid))
+
+        self.con.commit()
+        embed = embed_template()
+        embed.title = "Success"
+        embed.add_field(name="Success", value="The Discord account is now connected to the Minecraft account.")
         await ctx.followup.send(embed=embed)
 
 

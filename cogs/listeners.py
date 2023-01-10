@@ -14,6 +14,7 @@ class Listeners(commands.Cog):
 
     @commands.Cog.listener()  # On role given
     async def on_member_update(self, before, after):
+        log.debug(f"{before.roles}, {after.roles}")
 
         # If the user is given a role
         if len(before.roles) < len(after.roles):

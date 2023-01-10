@@ -74,7 +74,7 @@ else:
 client = commands.Bot(intents=intents)  # Setting prefix
 
 _embed_template = discord.Embed(
-    title="Error!",
+    title="Success!",
     color=embed_color,
     url=embed_url
 )
